@@ -12,7 +12,7 @@ add "gem 'repotil', :git => "git://github.com/pythonandchips/repotil.git"
 
 ## Usage
 
-Please see the example app and the specs.
+Please see the specs.
 
 ## Contributing to repotil
 
