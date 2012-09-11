@@ -1,19 +1,26 @@
 class Repotil
   class Repotil::HasManyAssociationProxy
+    include Enumerable
     def initialize(foreign_key, association, klass)
       @foreign_key = foreign_key
       @association = association
       @klass = klass
+      @hydrator = Repotil::Hydrator.new
+    end
+
+    def [](index)
+      records[index]
+    end
+
+    def <<(item)
+      records << item
     end
 
     def each(&block)
-      hydrator = Repotil::Hydrator.new
       records.each do |record|
-        instance = hydrator.hydrate_instance(@klass, record)
-        yield(instance)
+        yield(record)
       end
     end
-
 
     def length
       records.length
@@ -22,7 +29,12 @@ class Repotil
     private
 
     def records
-      @records ||= @association.klass.where("#{@association.foreign_key} = #{@foreign_key}")
+      @records ||= hydrate_records
+    end
+
+    def hydrate_records
+      results = @association.klass.where("#{@association.foreign_key} = #{@foreign_key}")
+      results.map{|record| @hydrator.hydrate_instance(@klass, record) }
     end
   end
 end

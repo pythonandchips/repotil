@@ -28,7 +28,20 @@ describe Repotil::HasManyAssociationProxy do
     Then{ expect(entities.length).to eql 1 }
     Then{ expect(entities.all?{|entity| entity.class == HasManyAssociationEntity}).to be_true}
     Then{ expect(entities.first.email).to eql "user@local.me" }
+    context "using enumerable functions" do
+      When(:names){association_proxy.map{|entity| entity.name }}
+      Then{ expect(names).to eql ["hello"] }
+    end
+    context "when using array functions" do
+      context "accessing index" do
+        When(:entity){association_proxy[0]}
+        Then{ expect(entity.name).to eql "hello" }
+      end
 
+      context "adding item" do
+        When{association_proxy << HasManyAssociationEntity.new }
+        Then{ expect(association_proxy.length).to eql 2 }
+      end
+    end
   end
-
 end

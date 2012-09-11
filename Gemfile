@@ -5,6 +5,7 @@ gem "activesupport"
 group :development do
   gem "pry"
   gem "activerecord"
+  gem "rails"
   gem 'sqlite3'
   gem "rspec",       "~> 2.11"
   gem "rspec-given", "~> 1.5"
